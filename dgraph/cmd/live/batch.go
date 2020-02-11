@@ -43,6 +43,7 @@ import (
 	"github.com/dgraph-io/dgraph/xidmap"
 	"github.com/dgryski/go-farm"
 	"github.com/dustin/go-humanize/english"
+	"github.com/golang/glog"
 )
 
 // batchMutationOptions sets the clients batch mode to Pending number of buffers each of Size.
@@ -220,7 +221,9 @@ func createValueEdge(nq *api.NQuad, sid uint64) (*pb.DirectedEdge, error) {
 	}
 
 	p.Value = val.Value.([]byte)
-	p.ValueType = val.Tid.Enum()
+	// p.ValueType = val.Tid.Enum()
+	// p.ValueType = pb.Posting_ValType(sch.preds[nq.Predicate].ValueType)
+	p.ValueType = pb.Posting_STRING
 	return p, nil
 }
 
@@ -329,7 +332,7 @@ func (l *loader) conflictKeysForReq(req *request) []uint64 {
 	for _, nq := range req.Set {
 		conflicts, err := l.conflictKeysForNQuad(nq)
 		if err != nil {
-			fmt.Println(err)
+			glog.V(2).Infoln(err)
 			continue
 		}
 		keys = append(keys, conflicts...)

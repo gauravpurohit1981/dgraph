@@ -75,7 +75,7 @@ func TestIndexingFloat(t *testing.T) {
 func TestIndexingTime(t *testing.T) {
 	require.NoError(t, schema.ParseBytes([]byte("age:dateTime @index(year) ."), 1))
 	a, err := indexTokensForTest("age", "", types.Val{Tid: types.StringID,
-		Value: []byte("0010-01-01T01:01:01.000000001")})
+		Value: []byte("1957-01-01")})
 	require.NoError(t, err)
 	require.EqualValues(t, []byte{0x4, 0x0, 0xa}, []byte(a[0]))
 }
